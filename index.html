@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Individual-to-Group Conversion Refund Calculator</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        
+        .calculator {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .icon {
+            width: 48px;
+            height: 48px;
+            margin-right: 15px;
+            background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjQiIGN5PSIyNCIgcj0iMjQiIGZpbGw9IiNGRkY0RTYiLz4KPHJlY3QgeD0iMTIiIHk9IjEwIiB3aWR0aD0iMjQiIGhlaWdodD0iMjgiIHJ4PSI0IiBmaWxsPSIjRkZGNEU2IiBzdHJva2U9IiNCODgwNEMiIHN0cm9rZS13aWR0aD0iMiIvPgo8cmVjdCB4PSIxNiIgeT0iMTUiIHdpZHRoPSIxNiIgaGVpZ2h0PSIzIiByeD0iMS41IiBmaWxsPSIjRkZGNEU2IiBzdHJva2U9IiNCODgwNEMiIHN0cm9rZS13aWR0aD0iMSIvPgo8Y2lyY2xlIGN4PSIxOCIgY3k9IjI0IiByPSIxLjUiIGZpbGw9IiNCODgwNEMiLz4KPGNpcmNsZSBjeD0iMjQiIGN5PSIyNCIgcj0iMS41IiBmaWxsPSIjQjg4MDRDIi8+CjxjaXJjbGUgY3g9IjMwIiBjeT0iMjQiIHI9IjEuNSIgZmlsbD0iI0I4ODA0QyIvPgo8Y2lyY2xlIGN4PSIxOCIgY3k9IjMwIiByPSIxLjUiIGZpbGw9IiNCODgwNEMiLz4KPGNpcmNsZSBjeD0iMjQiIGN5PSIzMCIgcj0iMS41IiBmaWxsPSIjQjg4MDRDIi8+CjxjaXJjbGUgY3g9IjMwIiBjeT0iMzAiIHI9IjEuNSIgZmlsbD0iI0I4ODA0QyIvPgo8L3N2Zz4K') no-repeat center;
+            background-size: contain;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin: 0;
+            font-size: 24px;
+        }
+        
+        .instructions {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 30px;
+            color: #495057;
+            line-height: 1.5;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #343a40;
+        }
+        
+        .step-container {
+            margin-bottom: 30px;
+        }
+        
+        .step-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #34495e;
+        }
+        
+        input[type="date"], input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e8ed;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+        
+        input[type="date"]:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .primary-btn {
+            background: #FFBE12;
+            color: #54320A;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: opacity 0.3s ease;
+        }
+        
+        .primary-btn:hover {
+            opacity: 0.9;
+        }
+        
+        .primary-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 6px;
+            font-size: 16px;
+            display: none;
+        }
+        
+        .result.eligible {
+            background: #DCFAE6;
+            border: 1px solid #c3e6cb;
+            color: #055735;
+        }
+        
+        .result.eligible-approval {
+            background: #FFF3CD;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+        
+        .result.not-eligible {
+            background: #FEE4E2;
+            border: 1px solid #f5c6cb;
+            color: #8A1E16;
+        }
+        
+        .result-details {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 4px;
+            border-left: 4px solid #17B26A;
+        }
+        
+        .result.not-eligible .result-details {
+            border-left-color: #F04438;
+        }
+        
+        .result.eligible-approval .result-details {
+            border-left-color: #F59E0B;
+        }
+        
+        .highlight {
+            font-weight: bold;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .customer-response {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(240, 68, 56, 0.1);
+            border-radius: 4px;
+            border-left: 4px solid #F04438;
+        }
+        
+        .customer-response strong {
+            color: #8A1E16;
+        }
+        
+        .calculation-breakdown {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #6c757d;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="header">
+            <div class="icon"></div>
+            <h1>Individual-to-Group Subscription Conversion Refund Calculator</h1>
+        </div>
+        
+        <div class="instructions">
+            <h3>⚠️ IMPORTANT - Individual-to-Group Conversion ONLY:</h3>
+            <p><strong style="color: #8A1E16;">This calculator is EXCLUSIVELY for individual subscribers who want to move to group subscriptions.</strong></p>
+            <p><strong>This special refund policy applies ONLY when:</strong></p>
+            <ul>
+                <li>Customer currently has an <strong>individual subscription</strong></li>
+                <li>Customer wants to <strong>purchase a group subscription</strong> via our online cart</li>
+                <li>You should use this calculator for <strong>every user account</strong> that will be part of the group</li>
+            </ul>
+            <p><strong>Refund Requirements:</strong></p>
+            <ul>
+                <li>If leadership approval is required in your use case, refunds or concessions are not to be promised until approval is received.</li>
+                <li>Refunds are not to be granted until there is <strong>proof of group subscription purchase</strong> received (receipt or paid invoice)</li>
+                <li>You'll need to <strong>recalculate the refund amount</strong> once the customer provides proof of group subscription purchase, as the refund amount will change based on the new date - as this calculates the <em>daily</em> rate.</li>
+            </ul>
+        </div>
+
+        <!-- Step 1: Check Eligibility -->
+        <div class="step-container" id="step1">
+            <div class="step-title">Step 1: Check Refund Eligibility</div>
+            
+            <div class="form-group">
+                <label for="purchaseDate">Purchase Date:</label>
+                <input type="date" id="purchaseDate" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="todayDate">Today's Date:</label>
+                <input type="date" id="todayDate" required>
+            </div>
+            
+            <button class="primary-btn" onclick="checkEligibility()">Check Eligibility</button>
+            
+            <div id="eligibilityResult" class="result">
+                <div id="eligibilityContent"></div>
+            </div>
+        </div>
+
+        <!-- Step 2: Calculate Refund (only shown if eligible) -->
+        <div class="step-container hidden" id="step2">
+            <div class="step-title">Step 2: Calculate Pro-rated Refund</div>
+            
+            <div class="form-group">
+                <label for="purchasePrice">Purchase Price (including tax):</label>
+                <input type="number" id="purchasePrice" step="0.01" min="0" placeholder="0.00" required>
+            </div>
+            
+            <button class="primary-btn" onclick="calculateRefund()">Calculate Refund Amount</button>
+            
+            <div id="refundResult" class="result">
+                <div id="refundContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set today's date as default
+        document.getElementById('todayDate').value = new Date().toISOString().split('T')[0];
+        
+        let daysSincePurchase = 0;
+        let isEligible = false;
+        let needsApproval = false;
+        
+        function checkEligibility() {
+            const purchaseDate = new Date(document.getElementById('purchaseDate').value);
+            const todayDate = new Date(document.getElementById('todayDate').value);
+            
+            // Validation
+            if (!document.getElementById('purchaseDate').value || !document.getElementById('todayDate').value) {
+                alert('Please fill in both dates');
+                return;
+            }
+            
+            if (todayDate < purchaseDate) {
+                alert('Today\'s date cannot be before the purchase date');
+                return;
+            }
+            
+            // Calculate days between purchase and today
+            const timeDifference = todayDate.getTime() - purchaseDate.getTime();
+            daysSincePurchase = Math.ceil(timeDifference / (1000 * 3600 * 24));
+            
+            const resultDiv = document.getElementById('eligibilityResult');
+            const resultContent = document.getElementById('eligibilityContent');
+            
+            if (daysSincePurchase <= 90) {
+                // Eligible - within 90 days
+                isEligible = true;
+                needsApproval = false;
+                resultDiv.className = 'result eligible';
+                resultContent.innerHTML = `
+                    <div class="highlight">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#17B26A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        ELIGIBLE for Pro-rated Refund
+                    </div>
+                    <div class="result-details">
+                        <strong>Status:</strong> Eligible for pro-rated refund<br>
+                        <strong>Days since purchase:</strong> ${daysSincePurchase} days<br>
+                        <strong>Refund policy:</strong> Subscriptions purchased within 90 days are eligible for pro-rated refunds, pending group subscription purchase<br><br>
+                        <em>Proceed to Step 2 to calculate the refund amount.</em>
+                    </div>
+                `;
+                document.getElementById('step2').classList.remove('hidden');
+            } else if (daysSincePurchase <= 180) {
+                // Eligible with approval - between 90-180 days
+                isEligible = true;
+                needsApproval = true;
+                resultDiv.className = 'result eligible-approval';
+                resultContent.innerHTML = `
+                    <div class="highlight">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        ELIGIBLE - Leadership Approval Required
+                    </div>
+                    <div class="result-details">
+                        <strong>Status:</strong> Eligible ONLY with leadership approval<br>
+                        <strong>Days since purchase:</strong> ${daysSincePurchase} days<br>
+                        <strong>Refund policy:</strong> Subscriptions purchased between 90-180 days ago require leadership approval<br>
+                        <strong>Action Required:</strong> Get approval before processing any refund<br><br>
+                        <em>Proceed to Step 2 to calculate the potential refund amount.</em>
+                    </div>
+                `;
+                document.getElementById('step2').classList.remove('hidden');
+            } else {
+                // Not eligible - over 180 days
+                isEligible = false;
+                needsApproval = false;
+                resultDiv.className = 'result not-eligible';
+                resultContent.innerHTML = `
+                    <div class="highlight">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#F04438" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        NOT ELIGIBLE for Pro-rated Refund
+                    </div>
+                    <div class="result-details">
+                        <strong>Status:</strong> This subscription is outside the refund window<br>
+                        <strong>Days since purchase:</strong> ${daysSincePurchase} days<br>
+                        <strong>Refund policy:</strong> Pro-rated refunds are only available within 180 days of purchase
+                    </div>
+                    <div class="customer-response">
+                        <strong>Recommended next steps:</strong><br>
+                        We know this may be disappointing for the Customer. In these scenarios, reach out to Kat to see if a promo code can be created as a way to help convert the Customer.
+                    </div>
+                `;
+                document.getElementById('step2').classList.add('hidden');
+            }
+            
+            resultDiv.style.display = 'block';
+            resultDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function calculateRefund() {
+            if (!isEligible) {
+                alert('Customer is not eligible for refund');
+                return;
+            }
+            
+            const purchasePrice = parseFloat(document.getElementById('purchasePrice').value);
+            
+            if (!purchasePrice || purchasePrice <= 0) {
+                alert('Please enter a valid purchase price');
+                return;
+            }
+            
+            // Calculate pro-rated refund
+            const daysUsed = daysSincePurchase;
+            const daysRemaining = 365 - daysUsed;
+            const dailyRate = purchasePrice / 365;
+            const refundAmount = dailyRate * daysRemaining;
+            
+            const resultDiv = document.getElementById('refundResult');
+            const resultContent = document.getElementById('refundContent');
+            
+            const approvalNote = needsApproval ? '<br><strong style="color: #F59E0B;">⚠️ Proof of group subscription purchase required prior to processing this refund</strong>' : '<br><strong style="color: #F59E0B;">⚠️ Proof of group subscription purchase required prior to processing this refund</strong>';
+            
+            resultDiv.className = isEligible && !needsApproval ? 'result eligible' : 'result eligible-approval';
+            resultContent.innerHTML = `
+                <div class="highlight">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="${needsApproval ? '#F59E0B' : '#17B26A'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Refund Calculation Complete
+                </div>
+                <div class="result-details">
+                    <strong>Refund Amount:</strong> <span class="highlight" style="font-size: 20px;">$${refundAmount.toFixed(2)}</span>${approvalNote}<br><br>
+                    <strong>Breakdown:</strong><br>
+                    • Days since purchase: ${daysSincePurchase} days<br>
+                    • Days remaining in subscription: ${daysRemaining} days<br>
+                    • Original purchase price: $${purchasePrice.toFixed(2)}<br>
+                    • Daily rate: $${dailyRate.toFixed(4)}<br>
+                    <div class="calculation-breakdown">
+                        Calculation: ${daysRemaining} days × $${dailyRate.toFixed(4)} = $${refundAmount.toFixed(2)}
+                    </div>
+                </div>
+            `;
+            
+            resultDiv.style.display = 'block';
+            resultDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Allow Enter key to trigger buttons
+        document.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                if (!document.getElementById('step2').classList.contains('hidden') && document.getElementById('purchasePrice').value) {
+                    calculateRefund();
+                } else if (document.getElementById('purchaseDate').value && document.getElementById('todayDate').value) {
+                    checkEligibility();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
